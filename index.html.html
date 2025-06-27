@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PictoChat UI (Chattable)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta charset="UTF-8">
+
+    <!-- Required scripts and styles -->
+    <link rel="stylesheet" href="nano.min.css" />
+    <link rel="stylesheet" href="chattable.css" />
+    <script src="pixi.min.js"></script>
+    <script src="howler.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: "nds";
+            src: url("nds.ttf");
+        }
+
+        body {
+            background-image: url('images/body-bg.png');
+            margin: 0;
+            font-family: 'nds';
+            overflow: hidden;
+        }
+
+        #chat-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #drawingCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 140px);
+            z-index: 1;
+        }
+
+        #emojiPalette, #keyboardInput {
+            position: absolute;
+            bottom: 150px;
+            left: 10px;
+            z-index: 5;
+            background: rgba(255,255,255,0.85);
+            padding: 5px;
+            border-radius: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        #emojiPalette img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        #keyboardInput button {
+            font-family: 'nds';
+            font-size: 18px;
+            padding: 4px 6px;
+            margin: 2px;
+        }
+
+        #chattable {
+            width: 100%;
+            height: 140px;
+            border: none;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <canvas id="drawingCanvas"></canvas>
+
+        <!-- Emoji palette -->
+        <div id="emojiPalette"></div>
+
+        <!-- Mock keyboard -->
+        <div id="keyboardInput"></div>
+
+        <!-- Chattable Embed -->
+        <iframe 
+            src="https://iframe.chat/embed?chat=56663387" 
+            id="chattable"
+            allowtransparency="true">
+        </iframe>
+    </div>
+
+    <!-- Auto-join setting -->
+    <script>
+        const AUTO_JOIN = true;
+    </script>
+
+    <!-- Drawing + Emoji + Keyboard logic -->
+    <script>
+        // Drawing
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 140;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        canvas.addEventListener('mousedown', e => {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', e => {
+            if (drawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mouseout', () => drawing = false);
+
+        // Emoji panel
+        const emojiPalette = document.getElementById('emojiPalette');
+        for (let i = 1; i <= 60; i++) {
+            const img = document.createElement('img');
+            img.src = `images/emojis/emoji_${i}.png`;
+            img.onclick = () => sendToChat(`::emoji_${i}::`);
+            emojiPalette.appendChild(img);
+        }
+
+        // Keyboard
+        const keys = '1234567890qwertyuiopasdfghjklzxcvbnm';
+        const keyboardInput = document.getElementById('keyboardInput');
+        keys.split('').forEach(char => {
+            const btn = document.createElement('button');
+            btn.innerText = char;
+            btn.onclick = () => insertIntoChat(char);
+            keyboardInput.appendChild(btn);
+        });
+
+        const insertIntoChat = char => {
+            const iframe = document.getElementById('chattable');
+            const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const input = innerDoc.querySelector('textarea, input[type="text"]');
+            if (input) {
+                input.value += char;
+                input.focus();
+            }
+        }
+
+        const sendToChat = msg => {
+            const iframe = document.getElementById('chattable');
+            const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const input = innerDoc.querySelector('textarea, input[type="text"]');
+            const button = innerDoc.querySelector('button[type="submit"], .send');
+            if (input && button) {
+                input.value = msg;
+                button.click();
+            }
+        }
+    </script>
+
+    <!-- Chattable init -->
+    <script src="https://iframe.chat/scripts/main.min.js"></script>
+    <script>
+        chattable.initialize({
+            stylesheet: "chattable.css"
+        });
+    </script>
+</body>
+</html>
