@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  >
+  <title>PictoChat UI (Chattable)</title>
+
+  <!-- Core styles -->
+  <link rel="stylesheet" href="nano.min.css">
+  <link rel="stylesheet" href="chattable.css">
+
+  <!-- Nintendo DS font -->
+  <style>
+    @font-face {
+      font-family: 'nds';
+      src: url('nds.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    body {
+      margin: 0;
+      font-family: 'nds', sans-serif;
+      background: url('images/body-bg.png') no-repeat center/cover;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <!-- Pixi drawing canvas will be injected here -->
+    <div id="drawingContainer"></div>
+
+    <!-- Emoji picker -->
+    <div id="emojiPalette"></div>
+
+    <!-- On-screen DS-style keyboard -->
+    <div id="keyboardInput"></div>
+
+    <!-- Chattable embed -->
+    <iframe
+      id="chattable"
+      src="https://iframe.chat/embed?chat=56663387"
+      allowTransparency="true"
+      frameborder="0"
+      scrolling="no"
+    ></iframe>
+  </div>
+
+  <!-- Third-party libraries -->
+  <script src="pixi.min.js"></script>
+  <script src="howler.min.js"></script>
+
+  <!-- Your app logic: drawing + emoji + keyboard -->
+  <script>
+    // --- PIXI Setup & Drawing ---
+    const app = new PIXI.Application({
+      view: (() => {
+        const c = document.createElement('canvas');
+        c.id = 'drawingCanvas';
+        document.getElementById('drawingContainer').appendChild(c);
+        return c;
+      })(),
+      width: window.innerWidth,
+      height: window.innerHeight - 140,
+      backgroundColor: 0xffffff,
+    });
+    window.addEventListener('resize', () => {
+      app.renderer.resize(window.innerWidth, window.innerHeight - 140);
+    });
+
+    const graphics = new PIXI.Graphics();
+    app.stage.addChild(graphics);
+
+    let drawing = false;
+    app.view.addEventListener('pointerdown', () => {
+      drawing = true;
+      graphics.lineStyle(2, 0x000000).moveTo(
+        app.renderer.plugins.interaction.mouse.global.x,
+        app.renderer.plugins.interaction.mouse.global.y
+      );
+    });
+    app.view.addEventListener('pointerup', () => { drawing = false; });
+    app.view.addEventListener('pointermove', (e) => {
+      if (!drawing) return;
+      const pos = app.renderer.plugins.interaction.mouse.global;
+      graphics.lineTo(pos.x, pos.y);
+    });
+
+    // --- Emoji Palette ---
+    const emojiPalette = document.getElementById('emojiPalette');
+    for (let i = 1; i <= 60; i++) {
+      const img = document.createElement('img');
+      img.src = `images/emojis/emoji_${i}.png`;
+      img.addEventListener('click', () =>
+        postToChat({ type: 'KEY_INPUT', char: `::emoji_${i}::` })
+      );
+      emojiPalette.appendChild(img);
+    }
+
+    // --- DS-Style Keyboard ---
+    const keyboardInput = document.getElementById('keyboardInput');
+    const keyChars = '1234567890qwertyuiopasdfghjklzxcvbnm';
+    for (const ch of keyChars) {
+      const btn = document.createElement('button');
+      btn.textContent = ch;
+      btn.addEventListener('click', () => postToChat({ type: 'KEY_INPUT', char: ch }));
+      keyboardInput.appendChild(btn);
+    }
+    // Backspace and Enter
+    ['BACKSPACE','ENTER'].forEach(action => {
+      const btn = document.createElement('button');
+      btn.textContent = action;
+      btn.addEventListener('click', () => {
+        postToChat({ type: action === 'BACKSPACE' ? 'KEY_BACKSPACE' : 'SEND' });
+      });
+      keyboardInput.appendChild(btn);
+    });
+
+    // --- Messaging helper ---
+    function postToChat(msg) {
+      const iframe = document.getElementById('chattable');
+      iframe.contentWindow.postMessage(msg, '*');
+    }
+
+    // --- Chattable Init ---
+    window.addEventListener('DOMContentLoaded', () => {
+      chattable.initialize({
+        stylesheet: 'chattable.css',
+        autoJoin: true
+      });
+    });
+  </script>
+
+  <!-- Chattable runtime -->
+  <script src="https://iframe.chat/scripts/main.min.js"></script>
+</body>
+</html>
