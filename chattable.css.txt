@@ -1,0 +1,178 @@
+/*———————————————————————————————————————
+  PictoChat “DS” Theme
+———————————————————————————————————————*/
+
+/* Nintendo DS BIOS font */
+@font-face {
+  font-family: "nds";
+  src: url("https://moa2300.github.io/DS/nds.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Global font smoothing & defaults */
+body,
+#top_banner,
+#input,
+#nameEntry,
+#name {
+  font-family: "nds", sans-serif;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grid background for main container & settings */
+#background,
+#settingsMenu {
+  background: url("https://moa2300.github.io/DS/images/grid.png") repeat;
+  background-size: 100px 100px;
+  background-attachment: local;
+}
+
+/* Link color */
+a {
+  color: #88f;
+}
+
+/* Top banner styling */
+#top_banner {
+  font-weight: bold !important;
+  background: linear-gradient(
+    0deg,
+    rgba(170,170,255,1) 0%,
+    rgba(238,238,255,1) 50%,
+    rgba(170,170,255,1) 100%
+  );
+  width: calc(100% - 2px);
+  border: 1px solid #99e;
+  box-shadow:
+    0 0 2px #fff,
+    0 3px 4px #005;
+  text-shadow: 1px 1px 2px #005;
+  position: relative;
+  z-index: 4;
+}
+
+/* Message container */
+.allMessages {
+  background-color: #fff;
+  background-size: 100px 100px;
+  box-shadow:
+    0 0 4px #fff,
+    0 3px 4px #005;
+  border: 1px solid #88f;
+  border-radius: 8px;
+  margin: 0 20px;
+  position: relative;
+}
+
+/* Emoji-only messages get a bigger icon */
+.allMessages.containsOnlyEmojis .emoji {
+  height: 50px;
+}
+
+/* Private messages */
+.allMessages.pm {
+  border-color: #f55;
+}
+.allMessages.pm::after {
+  content: "Private Message";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f55;
+  color: #fff;
+  height: 16px;
+  padding: 5px;
+  position: absolute;
+  right: 5vw;
+  bottom: 100%;
+  z-index: 5;
+  border-radius: 5px 5px 0 0;
+}
+
+/* Spacing between message wrappers */
+.msgWrapper + .msgWrapper {
+  margin: 25px 0 15px;
+}
+
+/* Add top padding when wrapper contains a PM indicator */
+.msgWrapper.pm,
+.msgWrapper:has(.pm) {
+  padding-top: 26px;
+}
+
+/* Timestamp style */
+#timestamp {
+  font-size: 2.25vw;
+  margin-top: 10px !important;
+}
+
+/* Input fields */
+#input,
+#nameEntry {
+  background-color: #fff;
+  border-top: 1px solid #aaf;
+  border-radius: 0;
+}
+
+/* Name field */
+#name {
+  background-color: #fff;
+  border: 1px solid #88f;
+  border-radius: 0;
+  padding: 2px;
+}
+
+/* Settings gear icon */
+#settings {
+  filter: drop-shadow(0 0 1px #fff);
+  transition: transform 250ms linear;
+}
+#settings:hover {
+  filter: drop-shadow(0 0 3px #fff);
+  transform: rotate(180deg);
+}
+
+/* Emoji tray toggle icon */
+#emojiTrayToggle {
+  width: 15px;
+  height: 15px;
+  padding: 6px;
+  margin: 3px 0 0 3px;
+  background-image: url("https://moa2300.github.io/DS/images/pixel-emoji.webp") !important;
+  background-size: cover;
+  opacity: 0.5;
+}
+
+/* “Someone is typing” indicator */
+#is_typing {
+  position: fixed;
+  right: 10px;
+  bottom: 27px;
+  background-color: #fff;
+  border: 1px solid #aaf;
+  border-radius: 3px;
+  filter: drop-shadow(0 0 1px #fff);
+  overflow: visible;
+}
+#is_typing:hover::after {
+  content: "Someone is typing";
+  position: fixed;
+  right: 35px;
+  bottom: 0;
+  width: 50vw;
+  font-size: 10pt;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 100000;
+}
+#is_typing > span {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  background-color: #aaf;
+  border-radius: 0;
+}
