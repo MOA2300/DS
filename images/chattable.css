@@ -1,0 +1,347 @@
+/*============================
+  Base setup & fonts
+============================*/
+:root {
+  --notification-sfx: https://xobyte.org/files/WinXPNotify.mp3;
+}
+
+*::selection {
+  color: #EEE;
+  background-color: #55E;
+  opacity: 1;
+}
+
+/* Nintendo DS BIOS font */
+@font-face {
+  font-family: "NintendoDS";
+  src: url('https://raw.githubusercontent.com/vaaas/nintendo-ds-bios-vasified/master/Nintendo-DS-BIOS-vasified.ttf') format('truetype');
+}
+
+body, html {
+  /* full-screen DS background from your repo */
+  background: url("https://raw.githubusercontent.com/MOA2300/DS/main/images/background.png")
+              center right / cover repeat;
+  margin: 0;
+  padding: 0;
+  /* DS font + fallbacks */
+  font-family: "NintendoDS", MS Gothic, Tahoma, sans-serif;
+}
+
+/*============================
+  Top banner override
+============================*/
+#top_banner {
+  background: rgba(0,153,255,0.5) !important;  /* translucent baby-blue */
+  width: 100% !important;                       /* span full width */
+  margin: 0 auto !important;                    /* center if container narrower */
+  position: relative !important;
+  height: 24px !important;                      /* taller to fit the line-height */
+  padding: 0 !important;
+  left: 0; top: 0;
+}
+#top_banner > * {
+  display: none !important;
+}
+#top_banner::before {
+  content: "Keoni’s Chatbook";
+  display: block;
+  font-family: "NintendoDS", monospace;
+  font-size: 12pt;
+  color: #FFF;
+  text-align: center;
+  line-height: 30px;  /* vertically center the text */
+}
+
+/*============================
+  Message container & bubbles
+============================*/
+.msgWrapper {
+  display: flex;
+  width: calc(100% - 20px);
+  align-items: center;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.allMessages {
+  display: block;
+  background-color: #fff !important;
+  border-radius: 3px !important;
+  margin: 0 10px 10px !important;
+  position: relative !important;
+  width: calc(100% - 20px) !important;
+
+  /* tighten lines to every 24px */
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 23px,
+      #ADD8E6 23px,
+      #ADD8E6 24px
+    ) !important;
+  background-size: 100% 24px !important;
+
+  /* ensure text sits on the lines */
+  padding: 4px 8px !important;
+
+  /* solid baby-blue outline */
+  border: 2px solid #89CFF0 !important;
+
+  /* reserve top 34px for the username pill */
+  padding-top: 33px !important;
+}
+
+/* hover highlight */
+.allMessages > pre:hover {
+  outline: dotted 2px #00a5ff
+;
+}
+/* remove the hover-fade overlay entirely */
+.allMessages:hover::after {
+  background-color: transparent !important;
+}
+
+/* little “tab” at top-left of bubble */
+.allMessages::before {
+  content: '';
+  position: absolute;
+  top: -10px; left: -2px;
+  width: 10px; height: 6px;
+  background-color: #fff !important;
+  border-top: 2px solid #ccc !important;
+  border-left:2px solid #ccc !important;
+  border-radius: 3px 0 0 0 !important;
+}
+
+/* remove old timestamp from ::before */
+.allMessages:before {
+  content: '' !important;
+}
+
+/* new timestamp in corner (::after) */
+.allMessages::after {
+  content: attr(time);
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  pointer-events: none;
+  font-style: italic;
+  font-size: 10pt;
+  color: #777;
+}
+
+/* align text with the rulings */
+.allMessages .msgBody,
+.allMessages > pre {
+  margin: 0px;
+  padding: 0px;
+  line-height: 23px !important;    /* one line per ruling */
+  cursor: text !important;
+}
+
+/*============================
+  Username “pill” style
+============================*/
+.senderInfo {
+  display: inline-block !important;
+  background-color: #89CFF0 !important;
+  color: #000 !important;              /* black text */
+  font-family: "NintendoDS", monospace !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  padding: 3px 6px !important;
+  border-radius: 2px !important;
+  margin-bottom: 6px !important;
+
+  /* float into top-left corner of each bubble */
+  position: absolute !important;
+  top: 0px !important;
+  left: -1px !important;
+  opacity: 0.6 !important;             /* translucent pill */
+}
+
+/* enforce black for sent/received variants too */
+.sent .senderInfo,
+.received .senderInfo {
+  color: #000 !important;
+}
+
+/*============================
+  Scrollbar styling
+============================*/
+#background {
+  scrollbar-color: unset;
+  scrollbar-width: unset;
+}
+#background::-webkit-scrollbar,
+#background ::-webkit-scrollbar {
+  width: 20px;
+}
+/* … your existing scrollbar rules … */
+
+/*============================
+  Inputs & controls
+============================*/
+#input, #nameEntry {
+  background-color: #FFF !important;
+  border: inset 2px rgb(208,208,191) !important;
+  padding: 5px !important;
+  width: calc(100% - 14px) !important;
+  font-family: inherit !important;
+}
+/* … rest of your input/button rules … */
+
+/*============================
+  Miscellaneous & mods
+============================*/
+/* … your existing misc rules … *//* — center the banner title — */
+#top_banner {
+  /* ensure it’s a positioning context */
+  position: relative !important;
+}
+
+#top_banner::before {
+  /* absolutely center just the pseudo-text */
+  position: absolute !important;
+  top: 0;             /* keep your existing vertical centering */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  
+  /* keep your styles */
+  content: "Keoni’s Chatbook";
+  display: block;
+  font-family: "NintendoDS", monospace;
+  font-size: 14pt;
+  color: #FFF;
+  line-height: 24px;  /* match your banner height */
+  white-space: nowrap;
+  pointer-events: none;
+}
+/*==================================================
+  Move the “Send Message [Enter to send]” bubble up
+==================================================*/
+#input, #nameEntry {
+  position: relative !important;
+  bottom: 8px !important; /* adjust this value to taste */
+}
+
+/* ────────────────────────────────────────────
+   Double-border: baby-blue + gray outset bevel
+───────────────────────────────────────────── */
+
+.allMessages {
+  /* your existing blue border */
+  border: 2px ridge #89CFF0 !important;
+  border-radius: 6px !important;       /* make it nicely rounded */
+
+  /* now add a gray, outset “bevel” outline outside it */
+  outline: 4px outset #ccc !important;
+  outline-offset: 0px !important;      /* space it right outside the blue edge */
+}
+/*────────────────────────────────────────────
+  Custom arrow buttons on the vertical scrollbar
+────────────────────────────────────────────*/
+
+/* size and basic styling of the scrollbar itself */
+#background::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
+
+/* make sure buttons show up */
+#background::-webkit-scrollbar-button {
+  display: block;
+  height: 16px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px;
+}
+
+/* ────────────────────────────────────────────────
+   Custom scrollbar arrows: only the two vertical buttons
+──────────────────────────────────────────────── */
+
+/* First, make sure all scrollbar-buttons are shown as blocks */
+#background::-webkit-scrollbar-button {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+}
+
+/* Hide the *horizontal* (left/right) buttons entirely */
+#background::-webkit-scrollbar-button:horizontal:decrement,
+#background::-webkit-scrollbar-button:horizontal:increment {
+  display: none;
+}
+
+
+   
+
+
+/* Style the UP arrow (vertical-decrement) */
+/* simplest is to use a separate, pre-rotated image: */
+#background::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("https://raw.githubusercontent.com/MOA2300/DS/main/images/scroll.png");
+}
+
+/* If you *really* want to attempt a CSS rotate you can try: */
+/*
+#background::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url('/path/to/scroll.png');
+  overflow: visible;        /!* allow the pseudo to transform *!/
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform-origin: center;
+}
+*/
+
+/* Tidy up the rest of the scrollbar to your taste */
+#background::-webkit-scrollbar {
+  width: 16px;
+}
+#background::-webkit-scrollbar-track {
+  background: transparent;
+}
+#background::-webkit-scrollbar-thumb {
+  background: rgba(0,165,255,0.3);
+  border-radius: 8px;
+}
+/* ────────────────────────────────────────────
+   1) Baby-blue border around the username pill
+───────────────────────────────────────────── */
+.senderInfo {
+  /* you already have a BG of #89CFF0, so 
+     just draw a slightly darker outline */
+  border: 2px ridge #00a5ffd9
+ !important;
+  border-radius: 4px !important;  /* keep it nice and rounded */
+}
+
+/* ────────────────────────────────────────────
+   2) Move the emoji toggle INSIDE the send box
+───────────────────────────────────────────── */
+/* First make sure the “send” container is a positioning context: */
+#input, #nameEntry {
+  position: relative !important;
+  padding-right: 5px !important; /* make room for the emoji icon */
+}
+
+/* Now absolutely position the emoji button itself */
+#emojiTrayToggle {
+  position: absolute !important;
+  right: 2px !important;          /* tuck it 8px from the right edge */
+  top: 20% !important;             /* vertically centered */
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;           /* sit above the input text */
+}
+
+/* If your markup uses a different ID/class for the smiley button,
+   just replace “#emojiTrayToggle” above with that selector. */
+/*============================
+  Top banner as custom image
+============================*/
