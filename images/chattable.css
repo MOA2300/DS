@@ -83,7 +83,7 @@ body, html {
   background-size: 100% 24px !important;
 
   /* ensure text sits on the lines */
-  padding: 4px 8px !important;
+  padding: 3px 1px !important;
 
   /* solid baby-blue outline */
   border: 2px solid #89CFF0 !important;
@@ -134,8 +134,8 @@ body, html {
 /* align text with the rulings */
 .allMessages .msgBody,
 .allMessages > pre {
-  margin: 0px;
-  padding: 0px;
+  margin: 8px;
+  padding: 8px;
   line-height: 23px !important;    /* one line per ruling */
   cursor: text !important;
 }
@@ -353,7 +353,23 @@ body, html {
   border: none !important;
 }
 
-#emojiTrayToggle:after {
-  content: "" !important; /* removes ":)" text */
+
+#emojiTrayToggle {
+  position: absolute !important;
+  right: 7.5px !important;             /* adjusts horizontal position */
+  bottom: 8px !important;            /* aligns with bottom inside bubble */
+  width: 17px !important;
+  height: 20px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  background-image: url('https://raw.githubusercontent.com/MOA2300/DS/main/images/favicon-2.png') !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  box-shadow: none !important;
+  z-index: 10;
 }
+
+
 
