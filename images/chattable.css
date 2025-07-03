@@ -345,19 +345,15 @@ body, html {
 /*============================
   Top banner as custom image
 ============================*/
-/* Replace emoji button with custom image */
-.emojiBtn {
-  background-image: url('https://raw.githubusercontent.com/MOA2300/DS/main/images/favicon-2.png') !important;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  width: 24px !important;   /* adjust to your image size */
-  height: 24px !important;
+#emojiTrayToggle {
+  background-image: url("https://raw.githubusercontent.com/MOA2300/DS/main/images/favicon-2.png") !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
   border: none !important;
-  padding: 0 !important;
-  outline: none !important;
-  cursor: pointer;
-  text-indent: -9999px; /* hides default text/icon */
-  overflow: hidden;
+}
+
+#emojiTrayToggle:after {
+  content: "" !important; /* removes ":)" text */
 }
 
